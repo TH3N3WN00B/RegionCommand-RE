@@ -31,6 +31,11 @@ commands:
         permission: regioncommand.regioncommandlist
         permission-message: You do not have permission
         aliases: [listrc, rclist, regioncommandlist]
+    regioncommandupdate:
+        description: Updates the plugin to the latest version
+        usage: /regioncommandupdate
+        permission: regioncommand.update
+        permission-message: You do not have permission
 permissions:
     regioncommand.addregioncommand:
         description: Allows adding region commands
@@ -40,4 +45,7 @@ permissions:
         default: op
     regioncommand.regioncommandlist:
         description: Allows listing region commands
+        default: op
+    regioncommand.update:
+        description: Allows updating the plugin
         default: op

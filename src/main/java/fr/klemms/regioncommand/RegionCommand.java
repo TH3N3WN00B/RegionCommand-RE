@@ -16,6 +16,8 @@ public class RegionCommand extends JavaPlugin {
     public static List<Region> commandForRegion = new ArrayList<>();
     public static int nextCommandID = 0;
 
+    private UpdateChecker updateChecker;
+
     @Override
     public void onEnable() {
         instance = this;
@@ -33,6 +35,12 @@ public class RegionCommand extends JavaPlugin {
         getCommand("regioncommandlist").setExecutor(new CommandRegionCommandList());
 
         getServer().getPluginManager().registerEvents(new PluginListener(), this);
+
+        updateChecker = new UpdateChecker(this);
+        AutoUpdater autoUpdater = new AutoUpdater(this, updateChecker);
+        getCommand("regioncommandupdate").setExecutor(autoUpdater);
+        getServer().getPluginManager().registerEvents(updateChecker, this);
+        updateChecker.checkForUpdates();
 
         getLogger().info("RegionCommand v" + getDescription().getVersion() + " enabled!");
     }
