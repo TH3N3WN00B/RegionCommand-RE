@@ -21,6 +21,10 @@ public class RegionCommand extends JavaPlugin {
         instance = this;
         saveDefaultConfig();
 
+        getConfig().addDefault("pluginVersion", 2);
+        getConfig().options().copyDefaults(true);
+
+        ConfigMigrator.migrate(this);
         Config.readConfig(this);
 
         getCommand("addregioncommand").setExecutor(new CommandAddRegionCommand());
