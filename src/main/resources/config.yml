@@ -1,0 +1,18 @@
+# RegionCommand Configuration
+# https://github.com/TH3N3WN00B/RegionCommand-RE
+
+# Internal config version - do not modify manually
+pluginVersion: 3
+
+# Virtual Threads (Java 21+)
+# When enabled, the plugin uses Java virtual threads for async tasks such as
+# update checking and downloading. Virtual threads are lightweight threads managed
+# by the JVM instead of the OS, which reduces memory overhead and improves
+# performance when many async operations run concurrently.
+# Set to true only if your server runs on Java 21 or newer.
+# Default: false (safe for all Java versions)
+use-threads: false
+
+# Registered regions - managed by the plugin, do not edit manually
+regionsN: 0
+regions: []

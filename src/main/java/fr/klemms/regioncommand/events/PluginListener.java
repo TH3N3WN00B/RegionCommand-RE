@@ -12,6 +12,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 
 public class PluginListener implements Listener {
@@ -37,20 +39,26 @@ public class PluginListener implements Listener {
     }
 
     private void executeRegionCommands(Player player, String regionName, EventType eventType) {
+        List<String> commands = new ArrayList<>();
+
         for (Region region : RegionCommand.commandForRegion) {
             if (region.isRemoved()) continue;
             if (!regionName.equalsIgnoreCase(region.getRegionName())) continue;
             if (region.getEventType() != eventType) continue;
+            commands.add(Variable.replaceVariable(region, player, region.getCommand()));
+        }
 
-            String command = Variable.replaceVariable(region, player, region.getCommand());
-            Bukkit.getScheduler().runTask(RegionCommand.instance, () -> {
+        if (commands.isEmpty()) return;
+
+        Bukkit.getScheduler().runTask(RegionCommand.instance, () -> {
+            for (String command : commands) {
                 try {
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
                 } catch (Exception e) {
                     RegionCommand.instance.getLogger().log(Level.SEVERE, "Failed to execute command: " + command, e);
                     PluginLogger.logError(RegionCommand.instance, "Command execution (command: " + command + ", region: " + regionName + ", player: " + player.getName() + ")", e);
                 }
-            });
-        }
+            }
+        });
     }
 }

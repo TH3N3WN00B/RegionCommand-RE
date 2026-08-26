@@ -34,7 +34,7 @@ public class UpdateChecker implements Listener {
     }
 
     public void checkForUpdates() {
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+        ThreadDispatcher.runAsync(plugin, () -> {
             try {
                 HttpClient client = HttpClient.newHttpClient();
                 HttpRequest request = HttpRequest.newBuilder()

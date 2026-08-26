@@ -49,7 +49,7 @@ public class AutoUpdater implements CommandExecutor {
         updating = true;
         sender.sendMessage(Component.text("Downloading update v" + updateChecker.getLatestVersion() + "...", NamedTextColor.YELLOW));
 
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+        ThreadDispatcher.runAsync(plugin, () -> {
             try {
                 File pluginFile = getPluginFile();
                 if (pluginFile == null) {
