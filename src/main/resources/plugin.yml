@@ -4,7 +4,7 @@ main: fr.klemms.regioncommand.RegionCommand
 api-version: '1.21'
 load: STARTUP
 description: Execute commands when players enter or leave WorldGuard regions
-author: Klemms
+author: Klemms and Rigorberto
 depend: [WorldGuard, WorldGuardEvents]
 commands:
     addregioncommand:
