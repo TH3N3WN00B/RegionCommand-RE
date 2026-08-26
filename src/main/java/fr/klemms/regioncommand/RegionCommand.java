@@ -23,26 +23,32 @@ public class RegionCommand extends JavaPlugin {
         instance = this;
         saveDefaultConfig();
 
-        getConfig().addDefault("pluginVersion", 2);
-        getConfig().options().copyDefaults(true);
+        try {
+            getConfig().addDefault("pluginVersion", 2);
+            getConfig().options().copyDefaults(true);
 
-        ConfigMigrator.migrate(this);
-        Config.readConfig(this);
+            ConfigMigrator.migrate(this);
+            Config.readConfig(this);
 
-        getCommand("addregioncommand").setExecutor(new CommandAddRegionCommand());
-        getCommand("removeregioncommand").setExecutor(new CommandRemoveRegionCommand());
-        getCommand("changeregioncommand").setExecutor(new CommandChangeRegionCommand());
-        getCommand("regioncommandlist").setExecutor(new CommandRegionCommandList());
+            getCommand("addregioncommand").setExecutor(new CommandAddRegionCommand());
+            getCommand("removeregioncommand").setExecutor(new CommandRemoveRegionCommand());
+            getCommand("changeregioncommand").setExecutor(new CommandChangeRegionCommand());
+            getCommand("regioncommandlist").setExecutor(new CommandRegionCommandList());
 
-        getServer().getPluginManager().registerEvents(new PluginListener(), this);
+            getServer().getPluginManager().registerEvents(new PluginListener(), this);
 
-        updateChecker = new UpdateChecker(this);
-        AutoUpdater autoUpdater = new AutoUpdater(this, updateChecker);
-        getCommand("regioncommandupdate").setExecutor(autoUpdater);
-        getServer().getPluginManager().registerEvents(updateChecker, this);
-        updateChecker.checkForUpdates();
+            updateChecker = new UpdateChecker(this);
+            AutoUpdater autoUpdater = new AutoUpdater(this, updateChecker);
+            getCommand("regioncommandupdate").setExecutor(autoUpdater);
+            getServer().getPluginManager().registerEvents(updateChecker, this);
+            updateChecker.checkForUpdates();
 
-        getLogger().info("RegionCommand v" + getDescription().getVersion() + " enabled!");
+            getLogger().info("RegionCommand v" + getDescription().getVersion() + " enabled!");
+        } catch (Exception e) {
+            getLogger().severe("RegionCommand failed to enable! Check logs/ folder for crash report.");
+            PluginLogger.logCrash(this, e);
+            getServer().getPluginManager().disablePlugin(this);
+        }
     }
 
     @Override
