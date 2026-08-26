@@ -16,13 +16,12 @@ public class CommandRegionCommandList implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player player)) {
             sender.sendMessage("This command can only be used by players.");
             return true;
         }
 
-        Player player = (Player) sender;
-        int count = RegionCommand.commandForRegion.size();
+        int count = (int) RegionCommand.commandForRegion.stream().filter(r -> !r.isRemoved()).count();
 
         player.sendMessage(Component.text("|---- RegionCommand -- " + count + " commands ----", NamedTextColor.GOLD));
 

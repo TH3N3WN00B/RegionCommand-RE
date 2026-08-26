@@ -2,7 +2,8 @@ package fr.klemms.regioncommand.commands;
 
 import fr.klemms.regioncommand.Region;
 import fr.klemms.regioncommand.RegionCommand;
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -14,7 +15,7 @@ public class CommandRemoveRegionCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length != 1) {
-            sender.sendMessage(ChatColor.RED + "Usage: /removeregioncommand <command_id>");
+            sender.sendMessage(Component.text("Usage: /removeregioncommand <command_id>", NamedTextColor.RED));
             return false;
         }
 
@@ -22,7 +23,7 @@ public class CommandRemoveRegionCommand implements CommandExecutor {
         try {
             id = Integer.parseInt(args[0]);
         } catch (NumberFormatException e) {
-            sender.sendMessage(ChatColor.RED + "Command ID must be a number");
+            sender.sendMessage(Component.text("Command ID must be a number", NamedTextColor.RED));
             return false;
         }
 
@@ -32,12 +33,12 @@ public class CommandRemoveRegionCommand implements CommandExecutor {
             if (region.getId() == id) {
                 regionIterator.remove();
                 RegionCommand.saveToDisk();
-                sender.sendMessage(ChatColor.GREEN + "Command #" + id + " has been removed.");
+                sender.sendMessage(Component.text("Command #" + id + " has been removed.", NamedTextColor.GREEN));
                 return true;
             }
         }
 
-        sender.sendMessage(ChatColor.RED + "Couldn't find a command with ID #" + id);
+        sender.sendMessage(Component.text("Couldn't find a command with ID #" + id, NamedTextColor.RED));
         return false;
     }
 }

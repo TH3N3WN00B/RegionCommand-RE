@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.logging.Level;
+import java.util.stream.Stream;
 
 public class ConfigMigrator {
 
@@ -46,9 +47,7 @@ public class ConfigMigrator {
         if (!configFile.exists()) return;
 
         File backupFolder = new File(dataFolder, "backups");
-        if (!backupFolder.exists()) {
-            backupFolder.mkdirs();
-        }
+        backupFolder.mkdirs();
 
         String timestamp = String.valueOf(System.currentTimeMillis());
         File backupFile = new File(backupFolder, "config_v1_" + timestamp + ".yml");
@@ -63,17 +62,18 @@ public class ConfigMigrator {
 
     private static void cleanupOldFiles(File dataFolder) {
         Path klemmsPlugins = dataFolder.toPath().getParent().resolve("KlemmsPlugins");
-        if (Files.exists(klemmsPlugins)) {
-            File updateConfig = klemmsPlugins.resolve("update_config.yml").toFile();
-            if (updateConfig.exists()) {
-                updateConfig.delete();
+        if (!Files.exists(klemmsPlugins)) return;
+
+        File updateConfig = klemmsPlugins.resolve("update_config.yml").toFile();
+        if (updateConfig.exists()) {
+            updateConfig.delete();
+        }
+
+        try (Stream<Path> stream = Files.list(klemmsPlugins)) {
+            if (stream.findAny().isEmpty()) {
+                Files.deleteIfExists(klemmsPlugins);
             }
-            try {
-                if (Files.list(klemmsPlugins).findAny().isEmpty()) {
-                    Files.deleteIfExists(klemmsPlugins);
-                }
-            } catch (IOException ignored) {
-            }
+        } catch (IOException ignored) {
         }
     }
 

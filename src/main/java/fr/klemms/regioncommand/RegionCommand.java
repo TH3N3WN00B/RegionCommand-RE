@@ -44,22 +44,17 @@ public class RegionCommand extends JavaPlugin {
     }
 
     public static void saveToDisk() {
-        int num = 0;
+        long count = commandForRegion.stream().filter(r -> !r.isRemoved()).count();
+        instance.getConfig().set("regionsN", count);
+        instance.getConfig().set("regions", null);
+
+        int index = 0;
         for (Region region : commandForRegion) {
             if (region.isRemoved()) continue;
-            num++;
-        }
-
-        instance.getConfig().set("regionsN", num);
-        instance.getConfig().set("regions", "");
-
-        num = 0;
-        for (Region region : commandForRegion) {
-            if (region.isRemoved()) continue;
-            instance.getConfig().set("regions." + num + ".regionName", region.getRegionName());
-            instance.getConfig().set("regions." + num + ".eventType", region.getEventType().getEventName());
-            instance.getConfig().set("regions." + num + ".command", region.getCommand());
-            num++;
+            instance.getConfig().set("regions." + index + ".regionName", region.getRegionName());
+            instance.getConfig().set("regions." + index + ".eventType", region.getEventType().getEventName());
+            instance.getConfig().set("regions." + index + ".command", region.getCommand());
+            index++;
         }
 
         instance.saveConfig();

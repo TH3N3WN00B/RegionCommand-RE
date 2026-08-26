@@ -1,11 +1,11 @@
 plugins {
     java
     `maven-publish`
-    id("com.gradleup.shadow") version "8.3.5"
+    id("com.gradleup.shadow") version "8.3.11"
 }
 
 group = "fr.klemms.regioncommand"
-version = "2.0.0"
+version = "2.0.1"
 description = "Execute commands when players enter or leave WorldGuard regions"
 
 repositories {
@@ -16,9 +16,9 @@ repositories {
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.1-R0.1-SNAPSHOT")
-    compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.12")
+    compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.15")
     compileOnly("net.raidstone:WorldGuardEvents:1.18.1")
-    implementation("org.bstats:bstats-bukkit:3.0.2")
+    implementation("org.bstats:bstats-bukkit:3.1.0")
 }
 
 java {
