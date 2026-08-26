@@ -6,7 +6,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.IOException;
@@ -60,20 +59,18 @@ public class AutoUpdater implements CommandExecutor {
                 }
 
                 File updateFile = new File(pluginFile.getParent(), "RegionCommand.jar.tmp");
-                File backupFile = new File(pluginFile.getParent(), "RegionCommand.jar.bak");
 
                 downloadFile(updateChecker.getDownloadUrl(), updateFile);
 
+                File backupFile = new File(pluginFile.getParent(), "RegionCommand.jar.bak");
                 Files.copy(pluginFile.toPath(), backupFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
                 Files.move(updateFile.toPath(), pluginFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
                 Bukkit.getScheduler().runTask(plugin, () -> {
-                    sender.sendMessage(Component.text("Update downloaded! Server will restart in 5 seconds...", NamedTextColor.GREEN));
-                    Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                        plugin.getLogger().info("Restarting server for update...");
-                        Bukkit.spigot().restart();
-                    }, 100L);
+                    sender.sendMessage(Component.text("Update downloaded successfully!", NamedTextColor.GREEN));
+                    sender.sendMessage(Component.text("Restart the server when ready to apply the update.", NamedTextColor.YELLOW));
+                    updating = false;
                 });
             } catch (Exception e) {
                 plugin.getLogger().log(Level.SEVERE, "Failed to update plugin", e);
