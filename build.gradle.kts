@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "fr.klemms.regioncommand"
-version = "2.0.1"
+version = "2.1.1"
 description = "Execute commands when players enter or leave WorldGuard regions"
 
 repositories {
