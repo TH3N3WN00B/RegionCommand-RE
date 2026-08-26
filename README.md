@@ -71,7 +71,8 @@ This gives Speed V for 5 seconds to any player entering the `veryregion` WorldGu
 
 The plugin automatically checks for new versions on startup. When an update is available:
 - OPs are notified on join and can click to update
-- Run `/regioncommandupdate` to download and restart the server
+- Run `/regioncommandupdate` to download the update
+- Restart the server manually when ready
 
 ## Migration from v1.5.0
 
