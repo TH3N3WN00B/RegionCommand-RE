@@ -1,0 +1,54 @@
+# Compiled class files
+*.class
+
+# Package files
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Include specific jars
+!RegionCommand-1.5.0-SPIGOT.jar
+!cfr.jar
+
+# Build directories
+build/
+.gradle/
+out/
+
+# Decompiled/extracted jar contents
+META-INF/
+org/
+junit/
+fr/
+decompiled/
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.settings/
+.project
+.classpath
+bin/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Original extracted plugin file at root
+/plugin.yml
+/LICENSE.txt
+/LICENSE
+
+# Logs
+logs/
+*.log
+
+# Temporary files
+*.tmp
+*.bak

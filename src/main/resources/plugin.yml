@@ -1,0 +1,43 @@
+name: RegionCommand
+version: '${version}'
+main: fr.klemms.regioncommand.RegionCommand
+api-version: '1.21'
+description: Execute commands when players enter or leave WorldGuard regions
+author: Klemms
+depend: [WorldGuard, WorldGuardEvents]
+softdepend: []
+commands:
+    addregioncommand:
+        description: Adds a command to execute for a region
+        usage: /addregioncommand <region_name> <enter/leave> <command to execute>
+        permission: regioncommand.addregioncommand
+        permission-message: You do not have permission
+        aliases: [addrc, rcadd, regioncommandadd]
+    removeregioncommand:
+        description: Removes a command from a region, use /regioncommandlist to get the command_id
+        usage: /removeregioncommand <command_id>
+        permission: regioncommand.removeregioncommand
+        permission-message: You do not have permission
+        aliases: [removerc, rcremove, regioncommandremove, deleterc, rcdelete, regioncommanddelete, deleteregioncommand]
+    changeregioncommand:
+        description: Changes the command of a region and/or the region name. Everything after the command_id is what will be modified.
+        usage: /changeregioncommand <command_id> <region_name> <enter/leave> <command to execute>
+        permission: regioncommand.removeregioncommand
+        permission-message: You do not have permission
+        aliases: [changerc, rcchange, regioncommandchange]
+    regioncommandlist:
+        description: Lists all commands to be executed
+        usage: /regioncommandlist
+        permission: regioncommand.regioncommandlist
+        permission-message: You do not have permission
+        aliases: [listrc, rclist, regioncommandlist]
+permissions:
+    regioncommand.addregioncommand:
+        description: Allows adding region commands
+        default: op
+    regioncommand.removeregioncommand:
+        description: Allows removing region commands
+        default: op
+    regioncommand.regioncommandlist:
+        description: Allows listing region commands
+        default: op
