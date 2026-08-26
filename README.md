@@ -1,12 +1,22 @@
-# RegionCommand 2.0.0
+# RegionCommand 2.1.0
 
 Execute commands when a player enters or leaves a WorldGuard region.
 
 ## About
 
-This is a port of **[RegionCommand](https://www.spigotmc.org/resources/free-regioncommand.22012/)** by **[Klemms](https://www.spigotmc.org/resources/authors/klemms.174298/)**, updated to work on modern Paper/UniverseSpigot 1.21+ servers with Java 25.
+This is a port of **[RegionCommand](https://www.spigotmc.org/resources/free-regioncommand.22012/)** by **[Klemms](https://www.spigotmc.org/resources/authors/klemms.174298/)**, updated to work on modern Paper servers.
 
 The original plugin works great, but it was abandoned and its update checker connects to a dead server, causing repeated `Connection refused` errors. This fork fixes that while keeping all the original functionality.
+
+### Compatibility
+
+| Paper Version | Java | Status |
+|---|---|---|
+| 1.21.11 | Java 21 | Supported |
+| 26.1.2 | Java 25 | Supported |
+| 26.2 | Java 25 | Supported |
+
+Single jar works on all versions - no need to download different builds.
 
 ### Changes from v1.5.0
 
@@ -16,6 +26,7 @@ The original plugin works great, but it was abandoned and its update checker con
 - Added `$uuid` variable for commands
 - Commands now run via `BukkitScheduler` instead of raw `Thread`
 - Automatic config migration from v1.5.0 (backups old configs before upgrading)
+- Auto-updater: checks GitHub releases and downloads updates with `/regioncommandupdate`
 - bstats moved to Gradle dependency
 
 ## Dependencies
@@ -31,6 +42,7 @@ The original plugin works great, but it was abandoned and its update checker con
 | `/removeregioncommand <id>` | Remove a command by ID |
 | `/regioncommandlist` | List all region commands (with clickable buttons) |
 | `/changeregioncommand <id> <region> <enter/leave> <command>` | Edit an existing command |
+| `/regioncommandupdate` | Update plugin to latest version |
 
 ### Variables
 
@@ -45,6 +57,7 @@ The original plugin works great, but it was abandoned and its update checker con
 | `regioncommand.addregioncommand` | Use `/addregioncommand` |
 | `regioncommand.removeregioncommand` | Use `/removeregioncommand` and `/changeregioncommand` |
 | `regioncommand.regioncommandlist` | Use `/regioncommandlist` |
+| `regioncommand.update` | Use `/regioncommandupdate` |
 
 ## Example
 
@@ -54,9 +67,15 @@ The original plugin works great, but it was abandoned and its update checker con
 
 This gives Speed V for 5 seconds to any player entering the `veryregion` WorldGuard region.
 
+## Auto-Update
+
+The plugin automatically checks for new versions on startup. When an update is available:
+- OPs are notified on join and can click to update
+- Run `/regioncommandupdate` to download and restart the server
+
 ## Migration from v1.5.0
 
-Drop `RegionCommand-2.0.0.jar` into your `plugins/` folder, remove the old JAR, and restart the server. Your existing `config.yml` will be detected and backed up automatically. No manual changes needed.
+Drop `RegionCommand-2.1.0.jar` into your `plugins/` folder, remove the old JAR, and restart the server. Your existing `config.yml` will be detected and backed up automatically. No manual changes needed.
 
 ## Building
 
@@ -64,7 +83,7 @@ Drop `RegionCommand-2.0.0.jar` into your `plugins/` folder, remove the old JAR, 
 ./gradlew shadowJar
 ```
 
-Output: `build/libs/RegionCommand-2.0.0.jar`
+Output: `build/libs/RegionCommand-2.1.0.jar`
 
 ## Credits
 
