@@ -21,13 +21,11 @@ public class CommandRegionCommandList implements CommandExecutor {
             return true;
         }
 
-        int count = (int) RegionCommand.commandForRegion.stream().filter(r -> !r.isRemoved()).count();
+        int count = RegionCommand.commandForRegion.size();
 
         player.sendMessage(Component.text("|---- RegionCommand -- " + count + " commands ----", NamedTextColor.GOLD));
 
         for (Region region : RegionCommand.commandForRegion) {
-            if (region.isRemoved()) continue;
-
             player.sendMessage(Component.text("| Command ID: ", NamedTextColor.GOLD)
                     .append(Component.text(region.getId(), NamedTextColor.LIGHT_PURPLE)));
 

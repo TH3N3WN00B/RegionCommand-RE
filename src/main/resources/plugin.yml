@@ -5,7 +5,7 @@ api-version: '1.21'
 load: STARTUP
 description: Execute commands when players enter or leave WorldGuard regions
 author: Klemms and Rigorberto
-depend: [WorldGuard, WorldGuardEvents]
+depend: [WorldGuard]
 commands:
     addregioncommand:
         description: Adds a command to execute for a region
@@ -30,7 +30,7 @@ commands:
         usage: /regioncommandlist
         permission: regioncommand.regioncommandlist
         permission-message: You do not have permission
-        aliases: [listrc, rclist, regioncommandlist]
+        aliases: [listrc, rclist]
     regioncommandupdate:
         description: Updates the plugin to the latest version
         usage: /regioncommandupdate

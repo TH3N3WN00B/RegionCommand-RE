@@ -4,13 +4,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 public class Config {
 
-    public static boolean useVirtualThreads = false;
-
     public static void readConfig(RegionCommand plugin) {
         FileConfiguration config = plugin.getConfig();
-
-        useVirtualThreads = config.getBoolean("use-threads", false);
-        plugin.getLogger().info("Virtual threads: " + (useVirtualThreads ? "enabled" : "disabled"));
 
         int regionsN = config.getInt("regionsN", 0);
 
@@ -25,7 +20,5 @@ public class Config {
             Region region = new Region(regionName, eventType, command, RegionCommand.nextCommandID++);
             RegionCommand.commandForRegion.add(region);
         }
-
-        RegionCommand.saveToDisk();
     }
 }

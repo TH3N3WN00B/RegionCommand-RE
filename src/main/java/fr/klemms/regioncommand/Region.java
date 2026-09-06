@@ -5,14 +5,12 @@ public class Region {
     private String regionName;
     private EventType eventType;
     private String command;
-    private boolean removed;
-    private int id;
+    private final int id;
 
     public Region(String regionName, EventType eventType, String command, int id) {
         this.regionName = regionName;
         this.eventType = eventType;
         this.command = command;
-        this.removed = false;
         this.id = id;
     }
 
@@ -40,19 +38,7 @@ public class Region {
         this.command = command;
     }
 
-    public boolean isRemoved() {
-        return removed;
-    }
-
-    public void setRemoved(boolean removed) {
-        this.removed = removed;
-    }
-
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 }

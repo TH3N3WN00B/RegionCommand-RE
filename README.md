@@ -1,4 +1,4 @@
-# RegionCommand 2.1.0
+# RegionCommand 2.1.3
 
 Execute commands when a player enters or leaves a WorldGuard region.
 
@@ -12,9 +12,10 @@ The original plugin works great, but it was abandoned and its update checker con
 
 | Paper Version | Java | Status |
 |---|---|---|
-| 1.21.11 | Java 21 | Supported |
-| 26.1.2 | Java 25 | Supported |
+| 1.21.x | Java 21+ | Supported |
+| 25.x | Java 21+ | Supported |
 | 26.2 | Java 25 | Supported |
+| 26.3 (próximamente) | Java 25 | Compatible |
 
 Single jar works on all versions - no need to download different builds.
 
@@ -25,14 +26,19 @@ Single jar works on all versions - no need to download different builds.
 - Migrated from BungeeCord chat API to Adventure API (Kyori)
 - Added `$uuid` variable for commands
 - Commands now run via `BukkitScheduler` instead of raw `Thread`
-- Automatic config migration from v1.5.0 (backups old configs before upgrading)
 - Auto-updater: checks GitHub releases and downloads updates with `/regioncommandupdate`
 - bstats moved to Gradle dependency
+- **Removed the abandoned WorldGuardEvents dependency**: region enter/leave detection is now implemented natively using the WorldGuard API (no external plugin required)
+- Uses `RegionManager.getApplicableRegions()` spatial queries with cached region container
+- O(1) region lookup index instead of linear scans per move event
+- Virtual threads auto-detected at runtime (Java 21+)
 
 ## Dependencies
 
 - [WorldGuard](https://dev.bukkit.org/projects/worldguard) (with WorldEdit)
-- [WorldGuardEvents](https://www.spigotmc.org/resources/worldguard-events.65176/)
+- [Paper](https://papermc.io) 1.21+ (or forks)
+
+> No WorldGuardEvents plugin required anymore.
 
 ## Commands
 
@@ -43,6 +49,8 @@ Single jar works on all versions - no need to download different builds.
 | `/regioncommandlist` | List all region commands (with clickable buttons) |
 | `/changeregioncommand <id> <region> <enter/leave> <command>` | Edit an existing command |
 | `/regioncommandupdate` | Update plugin to latest version |
+
+All commands have tab-completion support.
 
 ### Variables
 
@@ -74,22 +82,17 @@ The plugin automatically checks for new versions on startup. When an update is a
 - Run `/regioncommandupdate` to download the update
 - Restart the server manually when ready
 
-## Migration from v1.5.0
-
-Drop `RegionCommand-2.1.0.jar` into your `plugins/` folder, remove the old JAR, and restart the server. Your existing `config.yml` will be detected and backed up automatically. No manual changes needed.
-
 ## Building
 
 ```bash
 ./gradlew shadowJar
 ```
 
-Output: `build/libs/RegionCommand-2.1.0.jar`
+Output: `build/libs/RegionCommand-2.1.3.jar`
 
 ## Credits
 
 - **[Klemms](https://www.spigotmc.org/resources/authors/klemms.174298/)** - Original [RegionCommand](https://www.spigotmc.org/resources/free-regioncommand.22012/) plugin author
-- **WorldGuardEvents** by [Raidstone](https://www.spigotmc.org/resources/worldguard-events.65176/)
 
 ## License
 

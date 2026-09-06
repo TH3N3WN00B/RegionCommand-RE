@@ -16,6 +16,7 @@ public class RegionCommand extends JavaPlugin {
     public static List<Region> commandForRegion = new ArrayList<>();
     public static int nextCommandID = 0;
 
+    private PluginListener pluginListener;
     private UpdateChecker updateChecker;
 
     @Override
@@ -27,12 +28,21 @@ public class RegionCommand extends JavaPlugin {
             ConfigUpdater.update(this);
             Config.readConfig(this);
 
-            getCommand("addregioncommand").setExecutor(new CommandAddRegionCommand());
-            getCommand("removeregioncommand").setExecutor(new CommandRemoveRegionCommand());
-            getCommand("changeregioncommand").setExecutor(new CommandChangeRegionCommand());
+            CommandAddRegionCommand addCommand = new CommandAddRegionCommand();
+            CommandRemoveRegionCommand removeCommand = new CommandRemoveRegionCommand();
+            CommandChangeRegionCommand changeCommand = new CommandChangeRegionCommand();
+
+            getCommand("addregioncommand").setExecutor(addCommand);
+            getCommand("addregioncommand").setTabCompleter(addCommand);
+            getCommand("removeregioncommand").setExecutor(removeCommand);
+            getCommand("removeregioncommand").setTabCompleter(removeCommand);
+            getCommand("changeregioncommand").setExecutor(changeCommand);
+            getCommand("changeregioncommand").setTabCompleter(changeCommand);
             getCommand("regioncommandlist").setExecutor(new CommandRegionCommandList());
 
-            getServer().getPluginManager().registerEvents(new PluginListener(), this);
+            pluginListener = new PluginListener();
+            pluginListener.indexRegions();
+            getServer().getPluginManager().registerEvents(pluginListener, this);
 
             updateChecker = new UpdateChecker(this);
             AutoUpdater autoUpdater = new AutoUpdater(this, updateChecker);
@@ -54,14 +64,18 @@ public class RegionCommand extends JavaPlugin {
         getLogger().info("RegionCommand disabled.");
     }
 
+    public void reindexRegions() {
+        if (pluginListener != null) {
+            pluginListener.indexRegions();
+        }
+    }
+
     public static void saveToDisk() {
-        long count = commandForRegion.stream().filter(r -> !r.isRemoved()).count();
-        instance.getConfig().set("regionsN", count);
+        instance.getConfig().set("regionsN", commandForRegion.size());
         instance.getConfig().set("regions", null);
 
         int index = 0;
         for (Region region : commandForRegion) {
-            if (region.isRemoved()) continue;
             instance.getConfig().set("regions." + index + ".regionName", region.getRegionName());
             instance.getConfig().set("regions." + index + ".eventType", region.getEventType().getEventName());
             instance.getConfig().set("regions." + index + ".command", region.getCommand());

@@ -41,7 +41,6 @@ bin/
 Thumbs.db
 
 # Original extracted plugin file at root
-/plugin.yml
 /LICENSE.txt
 /LICENSE
 

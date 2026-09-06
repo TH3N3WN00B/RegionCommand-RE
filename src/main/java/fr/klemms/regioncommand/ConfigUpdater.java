@@ -1,10 +1,8 @@
 package fr.klemms.regioncommand;
 
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
@@ -14,9 +12,6 @@ import java.util.logging.Level;
 public class ConfigUpdater {
 
     public static void update(RegionCommand plugin) {
-        File dataFolder = plugin.getDataFolder();
-        File configFile = new File(dataFolder, "config.yml");
-
         FileConfiguration userConfig = plugin.getConfig();
         FileConfiguration defaultConfig;
 
@@ -31,7 +26,7 @@ public class ConfigUpdater {
             return;
         }
 
-        int added = mergeSection(userConfig, defaultConfig, "");
+        int added = mergeSection(plugin, userConfig, defaultConfig, "");
 
         if (added > 0) {
             plugin.saveConfig();
@@ -39,7 +34,7 @@ public class ConfigUpdater {
         }
     }
 
-    private static int mergeSection(FileConfiguration userConfig, FileConfiguration defaultConfig, String path) {
+    private static int mergeSection(RegionCommand plugin, FileConfiguration userConfig, FileConfiguration defaultConfig, String path) {
         int added = 0;
 
         Set<String> keys = defaultConfig.getKeys(false);
@@ -50,20 +45,16 @@ public class ConfigUpdater {
                 if (!userConfig.contains(fullPath)) {
                     userConfig.createSection(fullPath);
                 }
-                added += mergeSection(userConfig, defaultConfig, fullPath);
+                added += mergeSection(plugin, userConfig, defaultConfig, fullPath);
             } else {
                 if (!userConfig.contains(fullPath)) {
-                    userConfig.set(fullPath, defaultConfig.get(key));
+                    userConfig.set(fullPath, defaultConfig.get(fullPath));
                     added++;
-                    plugin().getLogger().info("Added new config option: " + fullPath);
+                    plugin.getLogger().info("Added new config option: " + fullPath);
                 }
             }
         }
 
         return added;
-    }
-
-    private static RegionCommand plugin() {
-        return RegionCommand.instance;
     }
 }

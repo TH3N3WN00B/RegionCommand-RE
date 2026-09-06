@@ -22,7 +22,11 @@ import java.util.logging.Level;
 public class UpdateChecker implements Listener {
 
     private static final String GITHUB_API = "https://api.github.com/repos/TH3N3WN00B/RegionCommand-RE/releases/latest";
-    private static final String DOWNLOAD_URL_PREFIX = "https://github.com/TH3N3WN00B/RegionCommand-RE/releases/latest/download/";
+
+    private static final HttpClient HTTP_CLIENT = HttpClient.newBuilder()
+            .followRedirects(HttpClient.Redirect.NORMAL)
+            .connectTimeout(java.time.Duration.ofSeconds(10))
+            .build();
 
     private final RegionCommand plugin;
     private String latestVersion;
@@ -36,14 +40,13 @@ public class UpdateChecker implements Listener {
     public void checkForUpdates() {
         ThreadDispatcher.runAsync(plugin, () -> {
             try {
-                HttpClient client = HttpClient.newHttpClient();
                 HttpRequest request = HttpRequest.newBuilder()
                         .uri(URI.create(GITHUB_API))
                         .header("Accept", "application/vnd.github.v3+json")
                         .GET()
                         .build();
 
-                HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                HttpResponse<String> response = HTTP_CLIENT.send(request, HttpResponse.BodyHandlers.ofString());
 
                 if (response.statusCode() != 200) {
                     plugin.getLogger().warning("Update check failed: HTTP " + response.statusCode());
@@ -61,7 +64,7 @@ public class UpdateChecker implements Listener {
                     JsonObject asset = json.getAsJsonArray("assets").get(0).getAsJsonObject();
                     downloadUrl = asset.get("browser_download_url").getAsString();
 
-                    Bukkit.getScheduler().runTask(plugin, () -> notifyOps());
+                    Bukkit.getScheduler().runTask(plugin, () -> notifyPlayer(Bukkit.getOnlinePlayers().toArray(new Player[0])));
                 } else {
                     plugin.getLogger().info("Plugin is up to date (v" + currentVersion + ")");
                 }
@@ -71,14 +74,14 @@ public class UpdateChecker implements Listener {
         });
     }
 
-    private void notifyOps() {
+    private void notifyPlayer(Player... players) {
         if (!updateAvailable) return;
 
         Component message = Component.text("[RegionCommand] Update available: v" + latestVersion + " ", NamedTextColor.GOLD)
                 .append(Component.text("[Click to update]", NamedTextColor.GREEN)
                         .clickEvent(ClickEvent.runCommand("/regioncommandupdate")));
 
-        for (Player player : Bukkit.getOnlinePlayers()) {
+        for (Player player : players) {
             if (player.hasPermission("regioncommand.update")) {
                 player.sendMessage(message);
             }
@@ -88,13 +91,7 @@ public class UpdateChecker implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         if (updateAvailable) {
-            Player player = event.getPlayer();
-            if (player.hasPermission("regioncommand.update")) {
-                Component message = Component.text("[RegionCommand] Update available: v" + latestVersion + " ", NamedTextColor.GOLD)
-                        .append(Component.text("[Click to update]", NamedTextColor.GREEN)
-                                .clickEvent(ClickEvent.runCommand("/regioncommandupdate")));
-                player.sendMessage(message);
-            }
+            notifyPlayer(event.getPlayer());
         }
     }
 

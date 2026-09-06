@@ -1,11 +1,9 @@
 plugins {
     java
-    `maven-publish`
-    id("com.gradleup.shadow") version "8.3.11"
 }
 
 group = "fr.klemms.regioncommand"
-version = "2.1.2"
+version = "2.1.3"
 description = "Execute commands when players enter or leave WorldGuard regions"
 
 repositories {
@@ -15,15 +13,12 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.21.1-R0.1-SNAPSHOT")
-    compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.15")
-    compileOnly("net.raidstone:WorldGuardEvents:1.18.1")
-    implementation("org.bstats:bstats-bukkit:3.1.0")
+    compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
+    compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.16")
 }
 
 java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(21))
-    withSourcesJar()
 }
 
 tasks.withType<JavaCompile> {
@@ -36,13 +31,6 @@ tasks.processResources {
     }
 }
 
-tasks.shadowJar {
-    archiveClassifier.set("")
-    archiveBaseName.set("RegionCommand")
-    relocate("org.bstats", "fr.klemms.regioncommand.libs.bstats")
-    exclude("META-INF/LICENSE.txt", "META-INF/MANIFEST.MF")
-}
-
-tasks.build {
-    dependsOn(tasks.shadowJar)
+tasks.jar {
+    archiveFileName.set("RegionCommand-${project.version}.jar")
 }

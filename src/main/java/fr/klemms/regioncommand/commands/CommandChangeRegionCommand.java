@@ -8,10 +8,13 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
-public class CommandChangeRegionCommand implements CommandExecutor {
+public class CommandChangeRegionCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -44,6 +47,7 @@ public class CommandChangeRegionCommand implements CommandExecutor {
                 region.setEventType(EventType.getEventTypeByName(eventTypeStr));
                 region.setCommand(cmd);
                 RegionCommand.saveToDisk();
+                RegionCommand.instance.reindexRegions();
                 sender.sendMessage(Component.text("Command #" + id + " has been updated.", NamedTextColor.GREEN));
                 return true;
             }
@@ -51,5 +55,18 @@ public class CommandChangeRegionCommand implements CommandExecutor {
 
         sender.sendMessage(Component.text("Couldn't find a command with ID #" + id, NamedTextColor.RED));
         return false;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        if (args.length == 1) {
+            return RegionCommand.commandForRegion.stream()
+                    .map(r -> String.valueOf(r.getId()))
+                    .collect(Collectors.toList());
+        }
+        if (args.length == 3) {
+            return List.of("enter", "leave");
+        }
+        return List.of();
     }
 }

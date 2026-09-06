@@ -8,8 +8,12 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 
-public class CommandAddRegionCommand implements CommandExecutor {
+import java.util.Arrays;
+import java.util.List;
+
+public class CommandAddRegionCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -26,13 +30,22 @@ public class CommandAddRegionCommand implements CommandExecutor {
             return false;
         }
 
-        String cmd = String.join(" ", java.util.Arrays.copyOfRange(args, 2, args.length));
+        String cmd = String.join(" ", Arrays.copyOfRange(args, 2, args.length));
         EventType eventType = EventType.getEventTypeByName(eventTypeStr);
         Region region = new Region(regionName, eventType, cmd, RegionCommand.nextCommandID++);
         RegionCommand.commandForRegion.add(region);
         RegionCommand.saveToDisk();
+        RegionCommand.instance.reindexRegions();
 
         sender.sendMessage(Component.text("Command added for region '" + regionName + "' (" + eventTypeStr + "): /" + cmd, NamedTextColor.GREEN));
         return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        if (args.length == 2) {
+            return List.of("enter", "leave");
+        }
+        return List.of();
     }
 }
